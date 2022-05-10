@@ -1,18 +1,43 @@
 package kata.supermarket;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import kata.supermarket.discount.DiscountsAggregator;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atMostOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class BasketTest {
+
+
+    @Test
+    void expectedDiscountIsDeductedFromBasketTotalAsExpected(){
+        Basket basket = new Basket();
+        basket.add(new Product(BigDecimal.TEN).oneOf());
+
+        assertEquals(10, basket.total().doubleValue()) ;
+
+        DiscountsAggregator discountsAggregator = Mockito.mock(DiscountsAggregator.class);
+        when(discountsAggregator.calculateDiscount(any())).thenReturn(BigDecimal.valueOf(2));
+        basket.applyDiscounts(discountsAggregator);
+
+        assertEquals(8, basket.total().doubleValue()) ;
+
+        verify(discountsAggregator, atMostOnce()).calculateDiscount(any());
+    }
 
     @DisplayName("basket provides its total value when containing...")
     @MethodSource

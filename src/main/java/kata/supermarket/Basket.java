@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import kata.supermarket.discount.DiscountsAggregator;
+
 public class Basket {
     private final List<Item> items;
+    private DiscountsAggregator discountsAggregator;
 
     public Basket() {
         this.items = new ArrayList<>();
@@ -23,6 +26,10 @@ public class Basket {
 
     public BigDecimal total() {
         return new TotalCalculator().calculate();
+    }
+
+    public void applyDiscounts(final DiscountsAggregator discountsAggregator){
+        this.discountsAggregator = discountsAggregator;
     }
 
     private class TotalCalculator {
@@ -47,7 +54,9 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts() {
-            return BigDecimal.ZERO;
+            if(discountsAggregator == null)
+                return BigDecimal.ZERO;
+            return discountsAggregator.calculateDiscount(items);
         }
 
         private BigDecimal calculate() {
