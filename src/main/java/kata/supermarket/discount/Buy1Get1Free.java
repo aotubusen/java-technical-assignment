@@ -7,6 +7,8 @@ import kata.supermarket.Item;
 
 public class Buy1Get1Free implements DiscountScheme{
     @Override public BigDecimal calculate(List<Item> items) {
+        if(items == null || items.isEmpty())
+            return BigDecimal.ZERO;
         return null;
     }
 }
