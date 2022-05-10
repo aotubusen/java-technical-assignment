@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import kata.supermarket.Item;
+import kata.supermarket.ItemByUnit;
 
 public class Buy1Get1Free implements DiscountScheme{
 
@@ -15,7 +16,7 @@ public class Buy1Get1Free implements DiscountScheme{
     @Override public BigDecimal calculate(final List<Item> items) {
         if(items == null || items.isEmpty())
             return BigDecimal.ZERO;
-        List<Item> discountedItem = items.stream().filter(i -> i.code().equals(productCode))
+        List<Item> discountedItem = items.stream().filter(i -> i.code().equals(productCode) && i instanceof ItemByUnit)
                         .collect(Collectors.toList());
         BigDecimal factor = new BigDecimal(discountedItem.size()/2);
         return items.get(0).price().multiply(factor);
