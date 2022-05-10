@@ -31,4 +31,15 @@ class Buy1Get1FreeTest {
 
         assertEquals(2, bogof.calculate(items).doubleValue());
     }
+
+    @Test
+    void shouldReturnZeroWhenOneProductAdded(){
+        List<Item> items = new ArrayList<>();
+        Product product = new Product(new BigDecimal(2));
+        Buy1Get1Free bogof = new Buy1Get1Free();
+
+        items.add(product.oneOf());
+
+        assertEquals(0, bogof.calculate(items).doubleValue());
+    }
 }
