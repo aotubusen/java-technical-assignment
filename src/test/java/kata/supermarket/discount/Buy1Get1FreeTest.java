@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import kata.supermarket.Item;
 import kata.supermarket.Product;
+import kata.supermarket.WeighedProduct;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,6 +53,18 @@ class Buy1Get1FreeTest {
 
         items.add(product.oneOf());
         items.add(product2.oneOf());
+
+        assertEquals(0, bogof.calculate(items).doubleValue());
+    }
+
+    @Test
+    void shouldNotDiscountItemByWeightProducts(){
+        List<Item> items = new ArrayList<>();
+        WeighedProduct weighedProduct = new WeighedProduct(new BigDecimal(1.5));
+        Buy1Get1Free bogof = new Buy1Get1Free(weighedProduct.code());
+
+        items.add(weighedProduct.weighing(new BigDecimal(10)));
+        items.add(weighedProduct.weighing(new BigDecimal(15)));
 
         assertEquals(0, bogof.calculate(items).doubleValue());
     }
