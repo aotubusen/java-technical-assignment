@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 import kata.supermarket.discount.DiscountsAggregator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.verify;
@@ -35,6 +37,25 @@ class BasketTest {
         basket.applyDiscounts(discountsAggregator);
 
         assertEquals(8, basket.total().doubleValue()) ;
+
+        verify(discountsAggregator, atMostOnce()).calculateDiscount(any());
+    }
+
+    @Test
+    void expectedExceptionWhenDiscountGreaterThanBasketSubtotal(){
+        Basket basket = new Basket();
+        basket.add(new Product(BigDecimal.TEN).oneOf());
+
+        assertEquals(10, basket.total().doubleValue()) ;
+
+        DiscountsAggregator discountsAggregator = Mockito.mock(DiscountsAggregator.class);
+        when(discountsAggregator.calculateDiscount(any())).thenReturn(BigDecimal.valueOf(11));
+        basket.applyDiscounts(discountsAggregator);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            basket.total();
+        });
+
+        assertTrue(exception.getMessage().contains("Error : Discount greater that basket total"));
 
         verify(discountsAggregator, atMostOnce()).calculateDiscount(any());
     }

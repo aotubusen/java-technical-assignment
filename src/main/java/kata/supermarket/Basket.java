@@ -60,7 +60,10 @@ public class Basket {
         }
 
         private BigDecimal calculate() {
-            return subtotal().subtract(discounts());
+            BigDecimal discount = discounts();
+            BigDecimal subtotal = subtotal();
+            if(discount.doubleValue() > subtotal.doubleValue()) throw new RuntimeException("Error : Discount greater that basket total");
+            return subtotal.subtract(discount);
         }
     }
 }
