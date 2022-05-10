@@ -17,7 +17,7 @@ class Buy1Get1FreeTest {
     void shouldReturnZeroWhenNoItems(){
 
         List<Item> items = new ArrayList<>();
-        Buy1Get1Free bogof = new Buy1Get1Free();
+        Buy1Get1Free bogof = new Buy1Get1Free("");
 
         assertEquals(BigDecimal.ZERO, bogof.calculate(items));
     }
@@ -25,7 +25,7 @@ class Buy1Get1FreeTest {
     void shouldDiscountPriceByHalf(){
         List<Item> items = new ArrayList<>();
         Product product = new Product(new BigDecimal(2));
-        Buy1Get1Free bogof = new Buy1Get1Free();
+        Buy1Get1Free bogof = new Buy1Get1Free(product.code());
         items.add(product.oneOf());
         items.add(product.oneOf());
 
@@ -36,7 +36,7 @@ class Buy1Get1FreeTest {
     void shouldReturnZeroWhenOneProductAdded(){
         List<Item> items = new ArrayList<>();
         Product product = new Product(new BigDecimal(2));
-        Buy1Get1Free bogof = new Buy1Get1Free();
+        Buy1Get1Free bogof = new Buy1Get1Free(product.code());
 
         items.add(product.oneOf());
 
@@ -48,7 +48,7 @@ class Buy1Get1FreeTest {
         List<Item> items = new ArrayList<>();
         Product product = new Product(new BigDecimal(2));
         Product product2 = new Product(new BigDecimal(2));
-        Buy1Get1Free bogof = new Buy1Get1Free();
+        Buy1Get1Free bogof = new Buy1Get1Free(product.code());
 
         items.add(product.oneOf());
         items.add(product2.oneOf());
